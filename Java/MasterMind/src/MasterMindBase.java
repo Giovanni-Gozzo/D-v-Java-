@@ -382,6 +382,16 @@ public class MasterMindBase {
          sinon met dans cod1 le code ne contenant que des "0" et retourne faux
          */
         public static boolean passeCodeSuivantLexicoCompat(int [] cod1, int [][] cod,int [][] rep, int nbCoups, int  nbCouleurs){
+            System.out.println("_cod1");
+            afficherTableau(cod1);
+            System.out.println("_cod");
+            afficherMatrice.afficherMatrice(cod);
+            System.out.println("_rep");
+            afficherMatrice.afficherMatrice(rep);
+            System.out.println("_coups");
+            System.out.println(nbCoups);
+            System.out.println("_couleur");
+            System.out.println(nbCouleurs);
             int[] cod2=new int[cod1.length];
             passeCodeSuivantLexico(cod1,nbCouleurs);
             while(estCompat(cod1,cod,rep,nbCoups,nbCouleurs)!=true && sontEgaux(cod1,cod2)!=true){
@@ -404,4 +414,28 @@ public class MasterMindBase {
          s'il n'a toujours pas trouvé au bout du nombre maximum d'essais
          - sinon le nombre de codes proposés par l'ordinateur
          */
+
+    public static int mancheOrdinateur(int lgCode,char[] tabCouleurs, int numManche, int nbEssaisMax) {
+        assert numManche >= 2;
+        int [] cod1=new int[lgCode];
+        int [][] cod =new int[10][lgCode];
+        int[][]rep = new int [10][2];
+        int r;
+        int[] a=new int[]{};
+        int nbCoups=0;
+        int nbCouleur=tabCouleurs.length;
+        int[] gagné={lgCode,0};
+        while(a!=gagné){
+            afficherTableau(cod1);
+            a=reponseHumain(lgCode);
+            rep[nbCoups]=a;
+            cod[nbCoups]=cod1;
+            nbCoups++;
+            passeCodeSuivantLexicoCompat(cod1,cod,rep,nbCoups,nbCouleur);
+        }
+        return nbCoups;
+    }
+
+    //___________________________________________________________________
+
 } // fin MasterMindBase

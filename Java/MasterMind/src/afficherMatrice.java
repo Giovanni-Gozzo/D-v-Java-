@@ -1,7 +1,7 @@
 public class afficherMatrice {
     public static void afficherMatrice(int[][] T) {
-        int c = T[0].length;
-        int l = T.length;
+        int c = T.length;
+        int l = T[0].length;
         for (int i = 0; i < c; i++) {
             if(i>0){
                 System.out.println();
