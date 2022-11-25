@@ -20,29 +20,16 @@ public class MasterMindBase {
         return tab;
     }
 
-    public static void afficherTableau(int[] T) {
-        for (int i = 0; i < T.length; i++) {
-            System.out.println(T[i]);
-        }
-    }
-    /**
-     * Donnée : 1 tableau d'entiers
-     * Résultat :renvoie rien mais affiche l'entierete d'un tableau en ligne.
-     */
-
     /** pré-requis : aucun
      résultat : une copie de tab
      */
     public static int[] copieTab(int[] tab){
-//        int[] tabcopie=new int[tab.length];
-//
-//        for(int i=0;i<tab.length;i++){
-//            tabcopie[i]=tab[i];
-//        }
-//        return tabcopie;
         return tab.clone();
     }
-
+    //______________________________________________
+    /** pré-requis : aucun
+     résultat : la liste des éléments de t entre parenthèses et séparés par des virgules
+     */
     public static String listElem(char[] t){
         String list="";
         for (int i = 0; i < t.length; i++) {
@@ -82,20 +69,19 @@ public class MasterMindBase {
         }
         return r;
     }
-
     /** pré-requis : aucun
      action : affiche un doublon et 2 de ses indices dans t s'il en existe
      résultat : vrai ssi les éléments de t sont différents
      stratégie : utilise la fonction plusGrandIndice
      */
     public static boolean elemDiff(char[] t){
-        boolean r=true;
         for(int i=0;i<t.length;i++){
-            if(plusGrandIndice(t,t[i])!=i){
-                r=false;
+            if(plusGrandIndice(t,t[i])!=i && t[i]!=' '){
+                System.out.println(t[i]+" est présent au moins deux fois aux indice: "+i+" et "+plusGrandIndice(t,t[i])+".");
+                return false;
             }
         }
-        return r;
+        return true;
     }
     /** pré-requis : t1.length = t2.length
      résultat : vrai ssi t1 et t2 contiennent la même suite d'entiers
@@ -108,8 +94,6 @@ public class MasterMindBase {
                 r=false;
             }
         }
-
-
         return r;
     }
 
@@ -150,8 +134,9 @@ public class MasterMindBase {
         }
         if(bool==false){
             System.out.println("un caractere dans codMot ne correspond pas a tabCouleur codMot doit avoir seulement comme caractere les suivant :");
-            afficherTableau.afficherTableauChar(tabCouleurs);
-            System.out.println();
+            for (int i = 0; i < tabCouleurs.length; i++) {
+                System.out.println(tabCouleurs[i]);
+            }
         }
         if (codMot.length()!=lgCode){
             bool=false;
@@ -163,6 +148,14 @@ public class MasterMindBase {
      résultat : le code codMot sous forme de tableau d'entiers en remplaçant chaque couleur par son indice dans tabCouleurs
      */
     public static int[] motVersEntiers(String codMot, char[] tabCouleurs){
+        boolean r=true;
+        int longcodMot=codMot.length();
+        for(int i=0;i<longcodMot;i++){
+            if(!estPresent(tabCouleurs,codMot.charAt(i)))
+                r=false;
+        }
+        assert r;
+
         int[] indicet=new int[codMot.length()];
         char[] charat=new char[codMot.length()];
         for(int i = 0;i<codMot.length();i++){
@@ -194,6 +187,7 @@ public class MasterMindBase {
      * Par exemple, si cod1 = (1,0,2,0) et cod2 = (0,1,0,0) la fonction retourne 1 (le "0" à l'indice 3)
      */
     public static int nbBienPlaces(int[] cod1,int[] cod2){
+        assert cod1.length==cod2.length;
         int r=0;
         for(int i=0;i<cod1.length;i++){
             if(cod1[i]==cod2[i]){
@@ -210,6 +204,14 @@ public class MasterMindBase {
     // O = 4
     // cod = (4,4,4,4)
     public static int[] tabFrequence(int[] cod, int nbCouleurs){
+        boolean r=true;
+        for(int i=0;i<cod.length;i++){
+            if(cod[i]<0 || cod[i]>nbCouleurs-1){
+                r=false;
+            }
+        }
+        assert r;
+
         int[] tab=new int[nbCouleurs];
         for(int i=0;i<cod.length;i++){
             tab[cod[i]]+=1;
@@ -222,6 +224,18 @@ public class MasterMindBase {
      Par exemple, si cod1 = (1,0,2,0) et cod2 = (0,1,0,0) la fonction retourne 3 (2 "0" et 1 "1")
      */
     public static int nbCommuns(int[] cod1,int[] cod2, int nbCouleurs){
+        boolean x=true;
+        for(int i=0;i<cod1.length;i++){
+            if(cod1[i]<0 || cod1[i]>nbCouleurs-1){
+                x=false;
+            }
+        }
+        for(int i=0;i<cod2.length;i++){
+            if(cod2[i]<0 || cod2[i]>nbCouleurs-1){
+                x=false;
+            }
+        }
+        assert x;
         int r=0;
         int []tab1=MasterMindBase.tabFrequence(cod1,nbCouleurs);
         int []tab2=MasterMindBase.tabFrequence(cod2,nbCouleurs);
@@ -246,6 +260,19 @@ public class MasterMindBase {
      et 2 mal placés (1 "0" et 1 "1")
      */
     public static int[] nbBienMalPlaces(int[] cod1,int[] cod2, int nbCouleurs){
+        boolean x=true;
+        for(int i=0;i<cod1.length;i++){
+            if(cod1[i]<0 || cod1[i]>nbCouleurs-1){
+                x=false;
+            }
+        }
+        for(int i=0;i<cod2.length;i++){
+            if(cod2[i]<0 || cod2[i]>nbCouleurs-1){
+                x=false;
+            }
+        }
+        assert(x && cod1.length==cod2.length);
+
         int[] tab=new int[2];
         tab[0]=nbBienPlaces(cod1,cod2);
         tab[1]=nbCommuns(cod1,cod2,nbCouleurs)-nbBienPlaces(cod1,cod2);
@@ -266,16 +293,16 @@ public class MasterMindBase {
      */
     public static int mancheHumain(int lgCode, char[] tabCouleurs, int numManche, int nbEssaisMax){
         assert numManche >= 1;
+        System.out.println("Manche "+numManche+" humain décodeur");
         int r;
         int [] x = codeAleat(4,6);
         int [] y = new int[6];
         int [] b = new int[2];
-        for(int i=2; (sontEgaux(x,y)!=true) && (numManche<=nbEssaisMax); i++){
-            y=propositionCodeHumain(numManche,lgCode,tabCouleurs);
+        for(int i=1; (sontEgaux(x,y)!=true) && (numManche<=nbEssaisMax); i++){
+            y=propositionCodeHumain(i,lgCode,tabCouleurs);
             b= nbBienMalPlaces(x,y,tabCouleurs.length);
             System.out.println( b[0]+" nombre bien placés.");
             System.out.println( b[1]+" nombre mal placés.");
-            numManche=i;
         }
         if(numManche<nbEssaisMax){
             r=numManche-1;
@@ -287,7 +314,24 @@ public class MasterMindBase {
         }
         return r;
     }
+    //____________________________________________________________
+
+    //...................................................................
+    // FONCTIONS COMPLÉMENTAIRES SUR LES CODES POUR LA MANCHE ORDINATEUR
+    //...................................................................
+
+    /** pré-requis : les éléments de cod sont des entiers de 0 à tabCouleurs.length-1
+     résultat : le code cod sous forme de mot d'après le tableau tabCouleurs
+     */
     public static String entiersVersMot(int[] cod, char[] tabCouleurs){
+        boolean r=true;
+        for(int i=0;i<cod.length;i++){
+            if(cod[i]<0 || cod[i]>(tabCouleurs.length-1)){
+                r=false;
+            }
+        }
+        assert r;
+
         String mot ="";
         for(int i=0;i<cod.length;i++){
             mot+=tabCouleurs[cod[i]];
@@ -301,6 +345,7 @@ public class MasterMindBase {
      résultat : vrai ssi rep est correct, c'est-à-dire rep[0] et rep[1] sont >= 0 et leur somme est <= lgCode
      */
     public static boolean repCorrecte(int[] rep, int lgCode){
+        assert rep.length==2;
         boolean r=false;
         if(rep[0]>=0 && rep[1]>=0 && rep[0]+rep[1]<=lgCode){
             r=true;
@@ -316,12 +361,20 @@ public class MasterMindBase {
     public static int[] reponseHumain(int lgCode){
         Scanner scanner=new Scanner(System.in);
         int []tab= new int[2];
-        for(int i=0; i<1 || !repCorrecte(tab,lgCode);i++){
+        System.out.println("saisie le nombre de nombres bien placé");
+        tab[0]=scanner.nextInt();
+        if(tab[0]!=lgCode){
+            System.out.println("saisie le nombre de nombres mal placé");
+            tab[1]=scanner.nextInt();
+        }
+        while(tab[0]+tab[1]>4){
             System.out.println("(Attention l'addition des nombres bien et mal placé doit etre inferieur ou egal a "+lgCode+" et ils doivent etre positif)");
             System.out.println("saisie le nombre de nombres bien placé");
             tab[0]=scanner.nextInt();
-            System.out.println("saisie le nombre de nombres mal placé");
-            tab[1]=scanner.nextInt();
+            if(tab[0]!=lgCode){
+                System.out.println("saisie le nombre de nombres mal placé");
+                tab[1]=scanner.nextInt();
+            }
         }
         return tab;
     }
@@ -335,6 +388,14 @@ public class MasterMindBase {
      sinon met dans cod1 le code ne contenant que des "0" et retourne faux
      */
     public static boolean passeCodeSuivantLexico(int[] cod1, int  nbCouleurs) {
+        boolean r=true;
+        for(int i=0;i<cod1.length;i++){
+            if(cod1[i]<0 || cod1[i]>(nbCouleurs-1)){
+                r=false;
+            }
+        }
+        assert r;
+
         int i = cod1.length - 1;
         while (i >= 0 && cod1[i] == nbCouleurs - 1) {
             i--;
@@ -354,88 +415,208 @@ public class MasterMindBase {
         }
     }
 
-        /**CHANGE : ajout du paramètre cod1 et modification des spécifications
-         *********************************************************************
-         pré-requis : cod est une matrice à cod1.length colonnes, rep est une matrice à 2 colonnes, 0 <= nbCoups < cod.length,
-         nbCoups < rep.length et les éléments de cod1 et de cod sont des entiers de 0 à nbCouleurs-1
-         résultat : vrai ssi cod1 est compatible avec les nbCoups premières lignes de cod et de rep,
-         c'est-à-dire que si cod1 était le code secret, les réponses aux nbCoups premières
-         propositions de cod seraient les nbCoups premières réponses de rep resp.
-         */
-        public static boolean estCompat(int [] cod1, int [][] cod,int [][] rep, int nbCoups,int  nbCouleurs){
-            boolean v=true;
-            for(int i=0;i<nbCoups;i++){
-                if(sontEgaux(nbBienMalPlaces(cod1,cod[i], nbCouleurs),rep[i])!=true){
-                    v=false;
+    /**CHANGE : ajout du paramètre cod1 et modification des spécifications
+     *********************************************************************
+     pré-requis : cod est une matrice à cod1.length colonnes, rep est une matrice à 2 colonnes, 0 <= nbCoups < cod.length,
+     nbCoups < rep.length et les éléments de cod1 et de cod sont des entiers de 0 à nbCouleurs-1
+     résultat : vrai ssi cod1 est compatible avec les nbCoups premières lignes de cod et de rep,
+     c'est-à-dire que si cod1 était le code secret, les réponses aux nbCoups premières
+     propositions de cod seraient les nbCoups premières réponses de rep resp.
+     */
+    public static boolean estCompat(int [] cod1, int [][] cod,int [][] rep, int nbCoups,int  nbCouleurs){
+        boolean x=true;
+        if (cod[0].length!=cod1.length || rep[0].length!=2 || nbCoups<0 || nbCoups>=cod.length || nbCoups>=rep.length){
+            x=false;
+        }
+        for(int i=0;i<cod1.length;i++){
+            if(cod1[i]<0 || cod1[i]>nbCouleurs-1){
+                x=false;
+            }
+        }
+        for (int i = 0; i < cod.length; i++) {
+            for (int j = 0; j < cod[0].length; j++) {
+                if(cod[i][j]<0 || cod1[i][j]>nbCouleurs-1){
+                    x=false;
                 }
             }
-            return v;
         }
-        /**CHANGE : renommage de passePropSuivante en passeCodeSuivantLexicoCompat,
-         ajout du paramètre cod1 et modification des spécifications
-         **************************************************************************
-         pré-requis : cod est une matrice à cod1.length colonnes, rep est une matrice à 2 colonnes, 0 <= nbCoups < cod.length,
-         nbCoups < rep.length et les éléments de cod1 et de cod sont des entiers de 0 à nbCouleurs-1
-         action/résultat : met dans cod1 le plus petit code (selon l'ordre lexicographique (dans l'ensemble
-         des codes à valeurs  de 0 à nbCouleurs-1) qui est à la fois plus grand que
-         cod1 selon cet ordre et compatible avec les nbCoups premières lignes de cod et rep si ce code existe,
-         sinon met dans cod1 le code ne contenant que des "0" et retourne faux
-         */
-        public static boolean passeCodeSuivantLexicoCompat(int [] cod1, int [][] cod,int [][] rep, int nbCoups, int  nbCouleurs){
-            System.out.println("_cod1");
-            afficherTableau(cod1);
-            System.out.println("_cod");
-            afficherMatrice.afficherMatrice(cod);
-            System.out.println("_rep");
-            afficherMatrice.afficherMatrice(rep);
-            System.out.println("_coups");
-            System.out.println(nbCoups);
-            System.out.println("_couleur");
-            System.out.println(nbCouleurs);
-            int[] cod2=new int[cod1.length];
-            passeCodeSuivantLexico(cod1,nbCouleurs);
-            while(estCompat(cod1,cod,rep,nbCoups,nbCouleurs)!=true && sontEgaux(cod1,cod2)!=true){
-                passeCodeSuivantLexico(cod1,nbCouleurs);
-            }
-            if(sontEgaux(cod1,cod2)!=true){
-                return true;
-            }
-            else{
-                return false;
+        assert x;
+        boolean v=true;
+        for(int i=0;i<nbCoups;i++){
+            if(sontEgaux(nbBienMalPlaces(cod1,cod[i], nbCouleurs),rep[i])!=true || sontEgaux(cod1,cod[i])){
+                v=false;
             }
         }
+        return v;
+    }
+    /**CHANGE : renommage de passePropSuivante en passeCodeSuivantLexicoCompat,
+     ajout du paramètre cod1 et modification des spécifications
+     **************************************************************************
+     pré-requis : cod est une matrice à cod1.length colonnes, rep est une matrice à 2 colonnes, 0 <= nbCoups < cod.length,
+     nbCoups < rep.length et les éléments de cod1 et de cod sont des entiers de 0 à nbCouleurs-1
+     action/résultat : met dans cod1 le plus petit code (selon l'ordre lexicographique (dans l'ensemble
+     des codes à valeurs  de 0 à nbCouleurs-1) qui est à la fois plus grand que
+     cod1 selon cet ordre et compatible avec les nbCoups premières lignes de cod et rep si ce code existe,
+     sinon met dans cod1 le code ne contenant que des "0" et retourne faux
+     */
+    public static boolean passeCodeSuivantLexicoCompat(int [] cod1, int [][] cod,int [][] rep, int nbCoups, int  nbCouleurs){
 
-        /** pré-requis : numManche >= 2
-         action : effectue la (numManche)ème  manche où l'humain est le codeur et l'ordinateur le décodeur
-         (le paramètre numManche ne sert que pour l'affichage)
-         résultat :
-         - 0 si le programme détecte une erreur dans les réponses du joueur humain
-         - un nombre supérieur à nbEssaisMax, calculé à partir du dernier essai de l'ordinateur (cf. sujet),
-         s'il n'a toujours pas trouvé au bout du nombre maximum d'essais
-         - sinon le nombre de codes proposés par l'ordinateur
-         */
+        int[] cod2=new int[cod1.length];
+        passeCodeSuivantLexico(cod1,nbCouleurs);
+        while(estCompat(cod1,cod,rep,nbCoups,nbCouleurs)!=true && sontEgaux(cod1,cod2)!=true){
+            passeCodeSuivantLexico(cod1,nbCouleurs);
+        }
+        if(sontEgaux(cod1,cod2)!=true){
+            return true;
+        }
+        else{
+            return false;
+        }
+    }
+
+    /** pré-requis : numManche >= 2
+     action : effectue la (numManche)ème  manche où l'humain est le codeur et l'ordinateur le décodeur
+     (le paramètre numManche ne sert que pour l'affichage)
+     résultat :
+     - 0 si le programme détecte une erreur dans les réponses du joueur humain
+     - un nombre supérieur à nbEssaisMax, calculé à partir du dernier essai de l'ordinateur (cf. sujet),
+     s'il n'a toujours pas trouvé au bout du nombre maximum d'essais
+     - sinon le nombre de codes proposés par l'ordinateur
+     */
 
     public static int mancheOrdinateur(int lgCode,char[] tabCouleurs, int numManche, int nbEssaisMax) {
         assert numManche >= 2;
+        System.out.println("Manche "+numManche+" ordinateur décodeur");
+        System.out.println("choisir dans votre tête un code à "+lgCode+" couleurs parmis celle que vous avez énnumérées précédement.");
         int [] cod1=new int[lgCode];
-        int [][] cod =new int[10][lgCode];
-        int[][]rep = new int [10][2];
-        int r;
-        int[] a=new int[]{};
+        int [][] cod =new int[nbEssaisMax][lgCode];
+        int[][]rep = new int [nbEssaisMax][2];
+        int[] a=new int[2];
         int nbCoups=0;
+        int r = 0;
         int nbCouleur=tabCouleurs.length;
         int[] gagné={lgCode,0};
-        while(a!=gagné){
-            afficherTableau(cod1);
+        boolean v=true;
+        while(!sontEgaux(a,gagné) && v && nbCoups<nbEssaisMax){
+            System.out.println("proposition ordinateur n°"+(nbCoups+1)+" "+entiersVersMot(cod1,tabCouleurs));
             a=reponseHumain(lgCode);
-            rep[nbCoups]=a;
-            cod[nbCoups]=cod1;
+            rep[nbCoups]=copieTab(a);
+            cod[nbCoups]=copieTab(cod1);
             nbCoups++;
-            passeCodeSuivantLexicoCompat(cod1,cod,rep,nbCoups,nbCouleur);
+            if(!sontEgaux(a,gagné)){v=passeCodeSuivantLexicoCompat(cod1,cod,rep,nbCoups,nbCouleur);}
         }
-        return nbCoups;
+        if(!v){
+            return 0;
+        }
+        else if(nbCoups==nbEssaisMax){
+            return(rep[nbCoups-1][1]+2*(lgCode-(rep[nbCoups-1][0]+rep[nbCoups-1][1])));
+        }
+        else{return nbCoups;}
+    }
+    //.........................................................................
+    // FONCTIONS DE SAISIE POUR LE PROGRAMME PRINCIPAL
+    //.........................................................................
+
+
+    /** pré-requis : aucun
+     action : demande au joueur humain de saisir un entier strictement positif,
+     avec re-saisie éventuelle jusqu'à ce qu'elle soit correcte
+     résultat : l'entier strictement positif saisi
+     */
+    public static int saisirEntierPositif(){
+        Scanner scanner=new Scanner(System.in);
+        System.out.println("saisir un entier positif");
+        int entierSaisis=scanner.nextInt();
+        while(entierSaisis<=0){
+            System.out.println("saisir un entier positif");
+            entierSaisis=scanner.nextInt();
+        }
+        return entierSaisis;
     }
 
     //___________________________________________________________________
 
+    /** pré-requis : aucun
+     action : demande au joueur humain de saisir un entier pair strictement positif,
+     avec re-saisie éventuelle jusqu'à ce qu'elle soit correcte
+     résultat : l'entier pair strictement positif saisi
+     */
+    public static int saisirEntierPairPositif(){
+        Scanner scanner=new Scanner(System.in);
+        System.out.println("saisir un entier pair et positif");
+        int entierSaisis=scanner.nextInt();
+        while(entierSaisis<=0 || entierSaisis%2!=0){
+            System.out.println("saisir un entier pair et positif");
+            entierSaisis=scanner.nextInt();
+        }
+        return entierSaisis;
+
+    }
+
+    //___________________________________________________________________
+
+    /** pré-requis : aucun
+     action : demande au joueur humain de saisir le nombre de couleurs (stricement positif),
+     puis les noms de couleurs aux initiales différentes,
+     avec re-saisie éventuelle jusqu'à ce qu'elle soit correcte
+     résultat : le tableau des initiales des noms de couleurs saisis
+     */
+    public static char[] saisirCouleurs(){
+        System.out.print("Pour le nombre de couleur ");
+        int nbCouleurs=saisirEntierPositif();
+        char[] tabCouleurs=new char[nbCouleurs];
+        for(int i=0;i<nbCouleurs;i++){
+            tabCouleurs[i]=' ';
+        }
+        for(int i=0;i<nbCouleurs;i++){
+            Scanner scanner=new Scanner(System.in);
+            System.out.println("saisir une couleur");
+            String Couleur=scanner.nextLine();
+            tabCouleurs[i]=Couleur.charAt(0);
+            while(!elemDiff(tabCouleurs)){
+                System.out.println("saisir une couleur (l'initiale de la couleur doit être diférentes des précédentes initiales.");
+                Couleur=scanner.nextLine();
+                tabCouleurs[i]=Couleur.charAt(0);
+            }
+        }
+        return tabCouleurs;
+
+    }
+
+    //___________________________________________________________________
+
+    //.........................................................................
+    // PROGRAMME PRINCIPAL
+    //.........................................................................
+
+
+    /**CHANGE : ajout de : le nombre d'essais maximum doit être strictement positif
+     ******************************************************************************
+     action : demande à l'utilisateur de saisir les paramètres de la partie (lgCode, tabCouleurs,
+     nbManches, nbEssaisMax),
+     effectue la partie et affiche le résultat (identité du gagnant ou match nul).
+     La longueur d'un code, le nombre de couleurs et le nombre d'essais maximum doivent être strictement positifs.
+     Le nombre de manches doit être un nombre pair strictement positif.
+     Les initiales des noms de couleurs doivent être différentes.
+     Toute donnée incorrecte doit être re-saisie jusqu'à ce qu'elle soit correcte.
+     */
+    public static void main (String[] args){
+        System.out.print("Pour la longueur du code ");
+        int lgCode=saisirEntierPositif();
+        System.out.println("Pour les couleurs disponibles: ");
+        char[] tabCouleurs=saisirCouleurs();
+        System.out.print("Pour le nombre d'essai maximum ");
+        int nbEssaisMax=saisirEntierPositif();
+        System.out.print("Pour le nombre de manches ");
+        int nbManches=saisirEntierPairPositif();
+        for(int i=0;i<nbManches;i+=2){
+            mancheHumain(lgCode,tabCouleurs,i+1,nbEssaisMax);
+            mancheOrdinateur(lgCode,tabCouleurs,i+2,nbEssaisMax);
+        }
+    } // fin main
+
+    //___________________________________________________________________
+
 } // fin MasterMindBase
+
+
