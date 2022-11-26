@@ -639,7 +639,7 @@ public class MasterMindBase {
         int nbEssaisMax=saisirEntierPositif();
         System.out.print("Pour le nombre de manches ");
         int nbManches=saisirEntierPairPositif();
-        for(int numManche=0;numManche<nbManches;i+=2){
+        for(int numManche=0;numManche<nbManches;numManche+=2){
             mancheHumain(lgCode,tabCouleurs,numManche+1,nbEssaisMax);
             mancheOrdinateur(lgCode,tabCouleurs,numManche+2,nbEssaisMax);
         }
