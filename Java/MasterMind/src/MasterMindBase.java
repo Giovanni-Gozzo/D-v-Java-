@@ -12,7 +12,7 @@ public class MasterMindBase {
      résultat : un tableau de nb entiers égaux à val
      */
     public static int[] initTab(int nb, int val){
-        assert nb >= 0;
+        assert nb >=0:"nb doit être supérieur ou égal à zéro";
         int[] tab=new int[nb];
         for(int i=0;i<nb;i++){
             tab[i]=val;
@@ -87,7 +87,7 @@ public class MasterMindBase {
      résultat : vrai ssi t1 et t2 contiennent la même suite d'entiers
      */
     public static boolean sontEgaux(int[] t1, int[] t2){
-        assert t1.length == t2.length;
+        assert t1.length == t2.length:"la longueur de t1 et t2 doivent être la même";
         boolean Egaux=true;
         for(int i=0;i< t1.length;i++){
             if(t1[i]!=t2[i]){
@@ -155,7 +155,7 @@ public class MasterMindBase {
             if(!estPresent(tabCouleurs,codMot.charAt(i)))
                 prérequis=false;
         }
-        assert prérequis;
+        assert prérequis:"les caractères de CodMot doivent être des éléments de Tabcouleurs";
         // Fin Pré-requis //
         int[] indicet=new int[codMot.length()];
         char[] charcodMot=new char[codMot.length()];
@@ -188,7 +188,7 @@ public class MasterMindBase {
      * Par exemple, si cod1 = (1,0,2,0) et cod2 = (0,1,0,0) la fonction retourne 1 (le "0" à l'indice 3)
      */
     public static int nbBienPlaces(int[] cod1,int[] cod2){
-        assert cod1.length==cod2.length;
+        assert cod1.length==cod2.length:"la longueur de cod1 doit être la même que cod2 ";
         int nbBienPlaces=0;
         for(int i=0;i<cod1.length;i++){
             if(cod1[i]==cod2[i]){
@@ -212,7 +212,7 @@ public class MasterMindBase {
                 prérequis=false;
             }
         }
-        assert prérequis;
+        assert prérequis:"Les éléments de cod doivent être des entiers de 0 à nbCouleurs-1";
         // Fin Pré-requis //
         int[] tab=new int[nbCouleurs];
         for(int i=0;i<cod.length;i++){
@@ -238,7 +238,7 @@ public class MasterMindBase {
                 prérequis=false;
             }
         }
-        assert prérequis;
+        assert prérequis:"les éléments de cod1 et cod2 doivent être des entiers de 0 à nbCouleurs-1";
         // Fin Pré-requis //
         int nbcommuns=0;
         int []tab1=MasterMindBase.tabFrequence(cod1,nbCouleurs);
@@ -373,7 +373,7 @@ public class MasterMindBase {
             System.out.println("saisie le nombre de nombres mal placé");
             nbBienMalPlace[1]=scanner.nextInt();
         }
-        while(nbBienMalPlace[0]+nbBienMalPlace[1]>4){
+        while(nbBienMalPlace[0]+nbBienMalPlace[1]>lgCode){
             System.out.println("(Attention l'addition des nombres bien et mal placé doit etre inferieur ou egal a "+lgCode+" et ils doivent etre positif)");
             System.out.println("saisie le nombre de nombres bien placé");
             nbBienMalPlace[0]=scanner.nextInt();
@@ -487,7 +487,7 @@ public class MasterMindBase {
                 }
             }
         }
-        assert prérequis;
+        assert prérequis ;
         // Fin Pré-requis //
         int[] cod2=new int[cod1.length];
         passeCodeSuivantLexico(cod1,nbCouleurs);
@@ -631,6 +631,8 @@ public class MasterMindBase {
      Toute donnée incorrecte doit être re-saisie jusqu'à ce qu'elle soit correcte.
      */
     public static void main (String[] args){
+        int nbpointhumain=0;
+        int nbpointordi=0;
         System.out.print("Pour la longueur du code ");
         int lgCode=saisirEntierPositif();
         System.out.println("Pour les couleurs disponibles: ");
@@ -640,8 +642,17 @@ public class MasterMindBase {
         System.out.print("Pour le nombre de manches ");
         int nbManches=saisirEntierPairPositif();
         for(int numManche=0;numManche<nbManches;numManche+=2){
-            mancheHumain(lgCode,tabCouleurs,numManche+1,nbEssaisMax);
-            mancheOrdinateur(lgCode,tabCouleurs,numManche+2,nbEssaisMax);
+            nbpointhumain+= mancheHumain(lgCode,tabCouleurs,numManche+1,nbEssaisMax);
+            nbpointordi+= mancheOrdinateur(lgCode,tabCouleurs,numManche+2,nbEssaisMax);
+        }
+        if nbpointordi>nbpointhumain{
+            System.out.println("victoire de l'humain avec "+nbpointordi+" points pour l'ordi et "+nbpointhumain+" points pour l'humain.");
+        }
+        else if nbpointordi==nbpointhumain{
+            System.out.println("il n'y a pas de victoire car l'ordinateur et l'humain ont "+nbpointordi+" points");
+        }
+        else{
+            System.out.println("victoire de l'ordinateur avec "+nbpointordi+" points pour l'ordi et "+nbpointhumain+" points pour l'humain.");
         }
     } // fin main
 
