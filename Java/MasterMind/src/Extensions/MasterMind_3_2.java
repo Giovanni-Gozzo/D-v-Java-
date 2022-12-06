@@ -1,6 +1,6 @@
 import java.util.Scanner;
 
-public class MasterMindBase {
+public class MasterMind_3_2 {
 
     //.........................................................................
     // OUTILS DE BASE
@@ -23,7 +23,6 @@ public class MasterMindBase {
      résultat : une copie de tab
      */
     public static int[] copieTab(int[] tab){
-
         return tab.clone();
     }
     //______________________________________________
@@ -207,8 +206,8 @@ public class MasterMindBase {
      */
     public static int nbCommuns(int[] cod1,int[] cod2, int nbCouleurs){
         int nbcommuns=0;
-        int []tab1=MasterMindBase.tabFrequence(cod1,nbCouleurs);
-        int []tab2=MasterMindBase.tabFrequence(cod2,nbCouleurs);
+        int []tab1=tabFrequence(cod1,nbCouleurs);
+        int []tab2=tabFrequence(cod2,nbCouleurs);
         for(int i=0;i<nbCouleurs;i++){
             if(tab1[i]==tab2[i]){
                 nbcommuns+=tab1[i];
@@ -262,6 +261,7 @@ public class MasterMindBase {
             System.out.println("----------------------------------");
             System.out.println( rep[i][0]+" nombre bien placés.");
             System.out.println( rep[i][1]+" nombre mal placés.");
+            affichePlateau(cod,rep,i,tabCouleurs);
             résultat=i+1;
         }
         if(résultat<nbEssaisMax ||(résultat==nbEssaisMax && sontEgaux(codeA,cod[cod.length-1]))){
@@ -270,6 +270,7 @@ public class MasterMindBase {
         else{
             résultat=rep[rep.length-1][1]+2*(lgCode-(rep[rep.length-1][0]+rep[rep.length-1][1]));
             System.out.println("Malheuresement vous avez depassé le nbessaimax votre score est donc de "+résultat);
+            System.out.println("le code était:"+entiersVersMot(codeA,tabCouleurs));
         }
         System.out.println("----------------------------------");
         return résultat;
@@ -368,13 +369,12 @@ public class MasterMindBase {
      propositions de cod seraient les nbCoups premières réponses de rep resp.
      */
     public static boolean estCompat(int [] cod1, int [][] cod,int [][] rep, int nbCoups,int  nbCouleurs){
-        boolean compat=true;
         for(int i=0;i<nbCoups;i++){
             if(!sontEgaux(nbBienMalPlaces(cod1,cod[i], nbCouleurs),rep[i]) || sontEgaux(cod1,cod[i])){
-                compat=false;
+                return false;
             }
         }
-        return compat;
+        return true;
     }
     /**CHANGE : renommage de passePropSuivante en passeCodeSuivantLexicoCompat,
      ajout du paramètre cod1 et modification des spécifications
@@ -411,6 +411,7 @@ public class MasterMindBase {
      */
 
     public static int mancheOrdinateur(int lgCode,char[] tabCouleurs, int numManche, int nbEssaisMax) {
+        Scanner scanner=new Scanner(System.in);
         System.out.println("Manche "+numManche+" ordinateur décodeur");
         System.out.println("----------------------------------");
         System.out.println("choisir dans votre tête un code à "+lgCode+" couleurs parmis celle que vous avez énnumérées précédement.");        int [] cod1=new int[lgCode];
@@ -428,24 +429,53 @@ public class MasterMindBase {
             reprop=reponseHumain(lgCode);
             rep[nbCoups]=copieTab(reprop);
             cod[nbCoups]=copieTab(cod1);
+            affichePlateau(cod,rep,nbCoups,tabCouleurs);
             nbCoups++;
             if(!sontEgaux(reprop,gagné)){
                 existecodsuiv=passeCodeSuivantLexicoCompat(cod1,cod,rep,nbCoups,nbCouleur);
             }
-        }
+        } 
+        int point=nbCoups;
         System.out.println("----------------------------------");
         if(!existecodsuiv){
-            System.out.println("Erreur dans la saisie des réponses bien et mal placés car aucun code n'a été trouvé");
-            return 0;
+            System.out.println("Fin de la manche");
+            System.out.println("----------------------------------");
+            System.out.println("quel est le code secret ?");
+            String codeSecret=scanner.nextLine();
+            while(!codeCorrect(codeSecret,lgCode,tabCouleurs)){
+                System.out.println("code invalide");
+                System.out.println("----------------------------------");
+                System.out.println("quel est le code secret ?");
+                codeSecret=scanner.nextLine();
+            }
+            afficheErreurs(codeSecret,cod,rep,nbCoups-1,lgCode,tabCouleurs);
+            point=0;
         }
         else if(nbCoups==nbEssaisMax && !sontEgaux(rep[rep.length-1],gagné)){
-            System.out.println("l'ordinateur n'a pas trouvé en moins de "+nbEssaisMax+" coups.");
-            return(rep[nbCoups-1][1]+2*(lgCode-(rep[nbCoups-1][0]+rep[nbCoups-1][1])));
+            System.out.println("Fin de la manche");
+            System.out.println("----------------------------------");
+            System.out.println("quel est le code secret ?");
+            String codeSecret=scanner.nextLine();
+            while(!codeCorrect(codeSecret,lgCode,tabCouleurs)){
+                System.out.println("code invalide");
+                System.out.println("----------------------------------");
+                System.out.println("quel est le code secret ?");
+                codeSecret=scanner.nextLine();
+            }
+            if(!estCompat(motVersEntiers(codeSecret,tabCouleurs),cod,rep,nbCoups,tabCouleurs.length)){
+                afficheErreurs(codeSecret,cod,rep,nbCoups-1,lgCode,tabCouleurs);
+                point=0;
+            }
+            else{
+                point=rep[nbCoups-1][1]+2*(lgCode-(rep[nbCoups-1][0]+rep[nbCoups-1][1]));
+                System.out.println("l'ordinateur n'a pas trouvé en moins de "+nbEssaisMax+" coups et il gagne "+point+" points.");
+            }
+            
         }
         else{
             System.out.println("l'ordinateur a trouvé en "+nbCoups+" coups.");
-            return nbCoups;
         }
+        return point;
     }
     //.........................................................................
     // FONCTIONS DE SAISIE POUR LE PROGRAMME PRINCIPAL
@@ -517,6 +547,45 @@ public class MasterMindBase {
 
     }
 
+    /** pré-requis : cod est une matrice, rep est une matrice à 2 colonnes,
+    0 <= nbCoups < cod.length, nbCoups < rep.length et
+    les éléments de cod sont des entiers de 0 à tabCouleurs.length -1
+    action : affiche les nbCoups premières lignes de cod (sous forme
+    de mots en utilisant le tableau tabCouleurs) et de rep
+    */
+    public static void affichePlateau(int [][] cod, int [][] rep,int nbCoups, char[] tabCouleurs){
+        System.out.println("----------------------------------");
+        System.out.println("Voici le plateau:");
+        for(int i=0;i<=nbCoups;i++){
+            System.out.print(entiersVersMot(cod[i],tabCouleurs) + "  ");
+            System.out.print(rep[i][0]+" ");
+            System.out.println(rep[i][1]);
+        }
+        System.out.println("----------------------------------");
+    }
+
+    /** pré-requis : cod est une matrice, rep est une matrice à 2 colonnes,
+    0 <= nbCoups < cod.length, nbCoups < rep.length,
+    les éléments de cod sont des entiers de 0 à tabCouleurs.length -1
+    et codMot est incorrect ou incompatible avec les nbCoups
+    premières lignes de cod et de rep
+    action : affiche les erreurs d’incorrection ou d’incompatibilité
+    */
+    public static void afficheErreurs (String codMot, int [][] cod, int [][] rep, int nbCoups, int lgCode, char[] tabCouleurs) {
+        int erreur =0;
+        if(!estCompat(motVersEntiers(codMot,tabCouleurs),cod,rep,nbCoups,tabCouleurs.length)){
+            for(int i=0;i<nbCoups;i++){
+                if(!sontEgaux(nbBienMalPlaces(motVersEntiers(codMot,tabCouleurs),cod[i],tabCouleurs.length),rep[i])){
+                    erreur=i+1;
+                }
+            }
+        System.out.println("----------------------------------");
+        System.out.println("le code secret ne correspond pas avec les réponses que vous avez données à partir de la ligne "+erreur+" du plateau.");
+        affichePlateau(cod,rep,nbCoups,tabCouleurs);
+        }
+    }
+
+
     //___________________________________________________________________
 
     //.........................................................................
@@ -559,8 +628,11 @@ public class MasterMindBase {
         else{
             System.out.println("victoire de l'ordinateur avec "+nbpointordi+" points pour l'ordi et "+nbpointhumain+" points pour l'humain.");
         }
+
     } // fin main
 
     //___________________________________________________________________
 
 } // fin MasterMindBase
+
+

@@ -1,6 +1,6 @@
 import java.util.Scanner;
 
-public class MasterMindBase {
+public class MasterMind_3_1 {
 
     //.........................................................................
     // OUTILS DE BASE
@@ -23,7 +23,6 @@ public class MasterMindBase {
      résultat : une copie de tab
      */
     public static int[] copieTab(int[] tab){
-
         return tab.clone();
     }
     //______________________________________________
@@ -207,8 +206,8 @@ public class MasterMindBase {
      */
     public static int nbCommuns(int[] cod1,int[] cod2, int nbCouleurs){
         int nbcommuns=0;
-        int []tab1=MasterMindBase.tabFrequence(cod1,nbCouleurs);
-        int []tab2=MasterMindBase.tabFrequence(cod2,nbCouleurs);
+        int []tab1=tabFrequence(cod1,nbCouleurs);
+        int []tab2=tabFrequence(cod2,nbCouleurs);
         for(int i=0;i<nbCouleurs;i++){
             if(tab1[i]==tab2[i]){
                 nbcommuns+=tab1[i];
@@ -262,6 +261,7 @@ public class MasterMindBase {
             System.out.println("----------------------------------");
             System.out.println( rep[i][0]+" nombre bien placés.");
             System.out.println( rep[i][1]+" nombre mal placés.");
+            affichePlateau(cod,rep,i,tabCouleurs);
             résultat=i+1;
         }
         if(résultat<nbEssaisMax ||(résultat==nbEssaisMax && sontEgaux(codeA,cod[cod.length-1]))){
@@ -428,6 +428,7 @@ public class MasterMindBase {
             reprop=reponseHumain(lgCode);
             rep[nbCoups]=copieTab(reprop);
             cod[nbCoups]=copieTab(cod1);
+            affichePlateau(cod,rep,nbCoups,tabCouleurs);
             nbCoups++;
             if(!sontEgaux(reprop,gagné)){
                 existecodsuiv=passeCodeSuivantLexicoCompat(cod1,cod,rep,nbCoups,nbCouleur);
@@ -516,6 +517,22 @@ public class MasterMindBase {
         return tabCouleurs;
 
     }
+    /** pré-requis : cod est une matrice, rep est une matrice à 2 colonnes,
+    0 <= nbCoups < cod.length, nbCoups < rep.length et
+    les éléments de cod sont des entiers de 0 à tabCouleurs.length -1
+    action : affiche les nbCoups premières lignes de cod (sous forme
+    de mots en utilisant le tableau tabCouleurs) et de rep
+    */
+    public static void affichePlateau(int [][] cod, int [][] rep,int nbCoups, char[] tabCouleurs){
+        System.out.println("----------------------------------");
+        System.out.println("Voici le plateau:");
+        for(int i=0;i<=nbCoups;i++){
+            System.out.print(entiersVersMot(cod[i],tabCouleurs) + "  ");
+            System.out.print(rep[i][0]+" ");
+            System.out.println(rep[i][1]);
+        }
+        System.out.println("----------------------------------");
+    }
 
     //___________________________________________________________________
 
@@ -564,3 +581,5 @@ public class MasterMindBase {
     //___________________________________________________________________
 
 } // fin MasterMindBase
+
+
