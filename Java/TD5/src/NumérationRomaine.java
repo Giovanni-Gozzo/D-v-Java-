@@ -24,9 +24,7 @@ public class NumérationRomaine {
      * chiffres romains qui correspondra aux unités.(1,2...9)
      */
     public static String dizaines(int n) {
-        String nb = "";
-        int unit = n % 10;
-        n = (n - (n % 10)) / 10;
+        String nb="";
         if (n < 4) {
             for (int i = 0; i < n; i++) {
                 nb += "X";
@@ -41,20 +39,15 @@ public class NumérationRomaine {
                 nb += "X";
             }
         }
-        nb += " ";
-        nb += unités(unit);
         return nb;
     }
 
     /**
-     * Donnée : un Entier compris entre 1 et 99
-     * Résultat :renvoie un string qui sera qui sera un entier de 1 a 99 en
-     * chiffres romains avec un espace entre chaque chiffres.
+     * Donnée : un Entier compris entre 1 et 9
+     * Résultat :renvoie un string qui sera qui sera un entier de 1 a 9 dizaine.
      */
     public static String centaines(int n) {
         String nb = "";
-        int diz = n % 100;
-        n = (n - (n % 100)) / 100;
         if (n < 4) {
             for (int i = 0; i < n; i++) {
                 nb += "C";
@@ -69,15 +62,12 @@ public class NumérationRomaine {
                 nb += "C";
             }
         }
-        nb += " ";
-        nb += dizaines(diz);
         return nb;
     }
 
     /**
-     * Donnée : un Entier compris entre 1 et 999
-     * Résultat :renvoie un string qui sera qui sera un entier de 1 a 999 en
-     * chiffres romains avec un espace entre chaque chiffres.
+     * Donnée : un Entier compris entre 1 et 9
+     * Résultat :renvoie un string qui sera qui sera un entier de 1 a 9 en centaine.
      */
     public static void afficher(int n) {
         String nb = "";
@@ -89,7 +79,16 @@ public class NumérationRomaine {
             }
         }
         nb += " ";
-        nb += centaines(cent);
+        n = (cent - (cent % 100)) / 100;
+        nb += centaines(n);
+        nb += " ";
+        cent%=100;
+        n = (cent - (cent % 10)) / 10;
+        nb += dizaines(n);
+        nb += " ";
+        cent%=10;
+        n = (cent - (cent % 1)) / 1;
+        nb += unités(n);
         System.out.println(nb);
     }
     /**

@@ -1,4 +1,8 @@
 public class Additionner{
+    /**
+     * Donnée : deux matrices d' entiers P et Q de même dimensions
+     * Résultat : retourne une nouvelle matrice égale à P+ Q
+     */
     public static int[][] additioner(int[][] P,int[][] Q){
         int c=P.length;
         int l=P[0].length;
@@ -11,7 +15,7 @@ public class Additionner{
         return tad;
     }
     /**
-     * Donnée : 2 matrices de meme taille constitué seulement de nombre entiers
-     * Résultat :renvoie une matrice de meme taille que ceux insérer avec comme contenue l'addition des 2 matrices.
+     * Donnée : deux matrices d' entiers P et Q de même dimensions
+     * Résultat : retourne une nouvelle matrice égale à P+ Q
      */
 }
