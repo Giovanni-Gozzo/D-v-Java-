@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="WebServers">
+    <option name="servers">
+      <webServer id="f39ab644-0066-4e29-806c-84dc65d05c1d" name="iut">
+        <fileTransfer rootFolder="/home/ann1/gozzog/palaysi/java" accessType="SFTP" host="162.38.222.93" port="6666" sshConfigId="18831b58-fb98-4d19-ba84-8b4f0f7201b5" sshConfig="gozzog@162.38.222.93:6666 password">
+          <advancedOptions>
+            <advancedOptions dataProtectionLevel="Private" keepAliveTimeout="0" passiveMode="true" shareSSLContext="true" isUseRsync="true" />
+          </advancedOptions>
+        </fileTransfer>
+      </webServer>
+    </option>
+  </component>
+</project>

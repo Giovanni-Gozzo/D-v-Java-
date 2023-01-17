@@ -35,14 +35,13 @@ public class MasterMind_3_1 {
             if(i==0){
                 list+="(";
                 list+=t[i];
-                list+=")";
             }
             else{
-                list+=",(";
+                list+=",";
                 list+=t[i];
-                list+=")";
             }
         }
+        list+=")";
         return list;
     }
     /** pré-requis : aucun

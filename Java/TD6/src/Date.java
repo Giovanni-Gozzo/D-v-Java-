@@ -2,7 +2,7 @@ public class Date {
     private int jour;
     private int mois;
     private int année;
-    private static String[] moisLettres={"Janvier","Février","Mars","Avril","Mai","Juin","Juillet","Aout","Septembre","Octobre","Novembre","Décembre"};
+    private static String[] moisLettres={"janvier","février","mars","avril","mai","juin","juillet","aout","septembre","octobre","novembre","décembre"};
     /*  Action : constructeur a partir de 3 entiers.
      *  Pre-requis : jour>=1 && jour<=31 mois>=1 && mois<=12 année est un entier quelconque.
      */

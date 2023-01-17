@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/.idea/Dev-Java-.iml" filepath="$PROJECT_DIR$/.idea/Dev-Java-.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Java/EE/EE.iml" filepath="$PROJECT_DIR$/Java/EE/EE.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Java/Java.iml" filepath="$PROJECT_DIR$/Java/Java.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Java/MasterMind/MasterMind.iml" filepath="$PROJECT_DIR$/Java/MasterMind/MasterMind.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Java/POO_MM/POO_MM.iml" filepath="$PROJECT_DIR$/Java/POO_MM/POO_MM.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Java/Sys/Sys.iml" filepath="$PROJECT_DIR$/Java/Sys/Sys.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Java/TD10/TD10.iml" filepath="$PROJECT_DIR$/Java/TD10/TD10.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Java/TD4/TD4.iml" filepath="$PROJECT_DIR$/Java/TD4/TD4.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Java/TD5/TD5.iml" filepath="$PROJECT_DIR$/Java/TD5/TD5.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Java/TD6/TD6.iml" filepath="$PROJECT_DIR$/Java/TD6/TD6.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Java/course-simple/TD7.iml" filepath="$PROJECT_DIR$/Java/course-simple/TD7.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Java/orques-base/orques-base.iml" filepath="$PROJECT_DIR$/Java/orques-base/orques-base.iml" />
+    </modules>
+  </component>
+</project>

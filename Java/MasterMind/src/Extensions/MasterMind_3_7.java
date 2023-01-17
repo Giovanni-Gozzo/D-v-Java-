@@ -1,6 +1,8 @@
+package Extensions;
+
 import java.util.Scanner;
 
-public class MasterMindBase {
+public class MasterMind_3_7 {
 
     //.........................................................................
     // OUTILS DE BASE
@@ -206,8 +208,8 @@ public class MasterMindBase {
      */
     public static int nbCommuns(int[] cod1,int[] cod2, int nbCouleurs){
         int nbcommuns=0;
-        int []tab1=tabFrequence(cod1,nbCouleurs);
-        int []tab2=tabFrequence(cod2,nbCouleurs);
+        int []tab1= tabFrequence(cod1,nbCouleurs);
+        int []tab2= tabFrequence(cod2,nbCouleurs);
         for(int i=0;i<nbCouleurs;i++){
             if(tab1[i]==tab2[i]){
                 nbcommuns+=tab1[i];
@@ -446,6 +448,46 @@ public class MasterMindBase {
             return nbCoups;
         }
     }
+    public static int[] C(int lgCode, char[] tabCouleurs,int nbEssaisMax){
+        System.out.println("choisir dans votre tête un code à "+lgCode+" couleurs parmis celle que vous avez énnumérées précédement.");
+        int[] cod1=new int[lgCode];
+        int[][]rep = new int [nbEssaisMax][2];
+        int [][] cod =new int[nbEssaisMax][lgCode];
+        int nbCoups=0;
+        int[] reprop=new int[2];
+        int[] gagné={lgCode,0};
+        boolean gagne=false;
+        while((reprop[0]+reprop[1])!=lgCode && !gagne){
+            System.out.println("----------------------------------");
+            System.out.println("proposition ordinateur n°"+(nbCoups+1)+" "+entiersVersMot(cod1,tabCouleurs));
+            System.out.println("----------------------------------");
+            reprop=reponseHumain(lgCode);
+            rep[nbCoups]=copieTab(reprop);
+            cod[nbCoups]=copieTab(cod1);
+            nbCoups++;
+            if((reprop[0]+reprop[1])!=lgCode){
+                cod1=passeCodeSuivantC(rep[nbCoups-1],cod1);
+            }
+            if(sontEgaux(reprop,gagné)){
+                gagne=true;
+            }
+        }
+        int ifond=0;
+        int iCurs=lgCode-1;
+        while(!gagne){
+            
+            if(sontEgaux(reprop,gagné)){
+                gagne=true;
+            }
+        }
+        return cod1;
+    }
+    public static int[] passeCodeSuivantC(int[] repderniere,int[]cod1){
+        for(int i=repderniere[0]+repderniere[1];i<cod1.length;i++){
+            cod1[i]++;
+        }
+        return cod1;
+    }
     //.........................................................................
     // FONCTIONS DE SAISIE POUR LE PROGRAMME PRINCIPAL
     //.........................................................................
@@ -515,7 +557,6 @@ public class MasterMindBase {
         return tabCouleurs;
 
     }
-
     //___________________________________________________________________
 
     //.........................................................................
@@ -534,7 +575,7 @@ public class MasterMindBase {
      Toute donnée incorrecte doit être re-saisie jusqu'à ce qu'elle soit correcte.
      */
     public static void main (String[] args){
-        int nbpointhumain=0;
+      /**  int nbpointhumain=0;
         int nbpointordi=0;
         System.out.print("Pour la longueur du code ");
         int lgCode=saisirEntierPositif();
@@ -557,9 +598,10 @@ public class MasterMindBase {
         }
         else{
             System.out.println("victoire de l'ordinateur avec "+nbpointordi+" points pour l'ordi et "+nbpointhumain+" points pour l'humain.");
-        }
+        }*/
+      char[] tabcouleur={'a','b','c','d','e','f'};
+      C(4,tabcouleur,10);
     } // fin main
-
     //___________________________________________________________________
 
 } // fin MasterMindBase

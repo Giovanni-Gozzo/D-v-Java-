@@ -1,6 +1,6 @@
 import java.util.Scanner;
 
-public class MasterMindBase {
+public class MM {
 
     //.........................................................................
     // OUTILS DE BASE
@@ -206,8 +206,8 @@ public class MasterMindBase {
      */
     public static int nbCommuns(int[] cod1,int[] cod2, int nbCouleurs){
         int nbcommuns=0;
-        int []tab1=tabFrequence(cod1,nbCouleurs);
-        int []tab2=tabFrequence(cod2,nbCouleurs);
+        int []tab1= MM.tabFrequence(cod1,nbCouleurs);
+        int []tab2= MM.tabFrequence(cod2,nbCouleurs);
         for(int i=0;i<nbCouleurs;i++){
             if(tab1[i]==tab2[i]){
                 nbcommuns+=tab1[i];

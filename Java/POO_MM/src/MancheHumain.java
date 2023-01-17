@@ -1,4 +1,3 @@
-package Extensions.POO;
+public class MancheHumain{
 
-public class MancheHumain {
 }
